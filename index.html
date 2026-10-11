@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>现有TDM改良方案分类统计 · Classification of TMD Improvement Schemes</title>
+<style>
+:root{color-scheme:light;
+ --surface:#fcfcfb;--page:#f9f9f7;--ink:#0b0b0b;--ink2:#52514e;--mute:#898781;
+ --grid:#e1e0d9;--base:#c3c2b7;--blue:#2a78d6;--border:rgba(11,11,11,.10);
+ --s1:#2a78d6;--s2:#eb6834;--s3:#1baf7a;--s4:#eda100;--s5:#e87ba4;--s6:#008300;--s7:#4a3aa7;--s8:#e34948;}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){color-scheme:dark;
+ --surface:#1a1a19;--page:#0d0d0d;--ink:#ffffff;--ink2:#c3c2b7;--mute:#898781;
+ --grid:#2c2c2a;--base:#383835;--blue:#3987e5;--border:rgba(255,255,255,.10);
+ --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;}}
+:root[data-theme="dark"]{color-scheme:dark;
+ --surface:#1a1a19;--page:#0d0d0d;--ink:#ffffff;--ink2:#c3c2b7;--mute:#898781;
+ --grid:#2c2c2a;--base:#383835;--blue:#3987e5;--border:rgba(255,255,255,.10);
+ --s1:#3987e5;--s2:#d95926;--s3:#199e70;--s4:#c98500;--s5:#d55181;--s6:#008300;--s7:#9085e9;--s8:#e66767;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--page);color:var(--ink);
+ font-family:system-ui,-apple-system,"Segoe UI","Microsoft YaHei",sans-serif;line-height:1.55}
+.wrap{max-width:1100px;margin:0 auto;padding:32px 20px 64px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:8px}
+h1{font-size:24px;margin:0 0 4px}
+.sub{color:var(--ink2);font-size:14px}
+#themeBtn{flex:none;border:1px solid var(--border);background:var(--surface);color:var(--ink);
+ padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px}
+.tiles{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:20px 0 28px}
+.tile{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:16px}
+.tile .v{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
+.tile .l{font-size:13px;color:var(--ink2);margin-top:2px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px}
+.card h2{font-size:17px;margin:0 0 4px}
+.card .cap{color:var(--ink2);font-size:13px;margin-bottom:16px}
+.hrow{display:grid;grid-template-columns:340px 1fr 96px;align-items:center;gap:12px;padding:5px 0}
+.hlabel{display:flex;align-items:baseline;gap:8px;min-width:0}
+.hlabel .cn{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hlabel .en{font-size:12px;color:var(--ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dot{flex:none;width:10px;height:10px;border-radius:3px;transform:translateY(1px)}
+.htrack{background:var(--grid);border-radius:4px;height:18px;overflow:hidden}
+.hbar{height:100%;border-radius:4px;cursor:default}
+.hval{font-size:13px;font-weight:600;text-align:right;font-variant-numeric:tabular-nums}
+.hval .pct{color:var(--mute);font-weight:400;font-size:12px}
+.ygrid{display:grid;grid-template-columns:repeat(8,1fr);gap:14px;align-items:end;padding-top:8px}
+.ycol{display:flex;flex-direction:column;align-items:center;gap:6px}
+.ybarwrap{height:180px;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.ybar{width:56%;min-height:3px;border-radius:4px 4px 0 0;cursor:default}
+.ylab{font-size:13px;font-variant-numeric:tabular-nums}
+.yval{font-size:12.5px;font-weight:600;color:var(--ink2);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
+.chip{border:1px solid var(--border);background:var(--surface);color:var(--ink2);
+ padding:5px 12px;border-radius:999px;cursor:pointer;font-size:12.5px}
+.chip.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th{position:sticky;top:0;background:var(--surface);text-align:left;padding:8px 8px;
+ border-bottom:2px solid var(--base);font-size:12px;color:var(--ink2);white-space:nowrap}
+td{padding:7px 8px;border-bottom:1px solid var(--grid);vertical-align:top}
+td.num{font-variant-numeric:tabular-nums;white-space:nowrap}
+.t-en{font-weight:600;max-width:340px}
+.t-cn{color:var(--ink2);max-width:300px}
+.jrn{max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.doi{max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mute)}
+.badge{color:#fff;font-size:11px;padding:2px 8px;border-radius:999px;white-space:nowrap;display:inline-block}
+#tip{position:fixed;pointer-events:none;background:var(--ink);color:var(--surface);
+ padding:5px 10px;border-radius:6px;font-size:12px;display:none;z-index:99;white-space:nowrap}
+footer{color:var(--mute);font-size:12px;margin-top:8px}
+@media (max-width:900px){.tiles{grid-template-columns:repeat(2,1fr)}
+ .hrow{grid-template-columns:1fr 84px}.htrack{grid-column:1/-1;grid-row:2}
+ .hlabel .en{display:none}.ygrid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+ <div>
+  <h1>现有TDM改良方案分类统计</h1>
+  <div class="sub">Classification of TMD (Tuned Mass Damper) Improvement Schemes · Web of Science 导出文献 · WoS export records</div>
+ </div>
+ <button id="themeBtn">暗色模式 Dark</button>
+</header>
+<div class="tiles">
+ <div class="tile"><div class="v">47</div><div class="l">文献总数 / Total records</div></div>
+ <div class="tile"><div class="v">46 + 1</div><div class="l">期刊论文 + 会议 / Journal papers + conference</div></div>
+ <div class="tile"><div class="v">2019–2026</div><div class="l">出版年份跨度 / Publication span</div></div>
+ <div class="tile"><div class="v">8</div><div class="l">改良方案大类 / Scheme categories</div></div>
+ <div class="tile"><div class="v">16 <span style="font-size:15px;color:var(--ink2)">(34.0%)</span></div><div class="l">最大类别：惯容式 / Top: Inerter-based</div></div>
+</div>
+<div class="card">
+ <h2>改良方案分类分布</h2>
+ <div class="cap">Distribution by improvement-scheme category · 每类一篇文献按其主要改良方案归类，颜色区分实体、条形按篇数排序</div>
+ <div class="hrow"><div class="hlabel"><span class="dot" style="background:#2a78d6"></span><span class="cn">惯容式改良</span><span class="en">Inerter-based</span></div><div class="htrack"><div class="hbar" style="width:34.0%;background:#2a78d6" data-tip="惯容式改良：16 篇 / 34.0%"></div></div><div class="hval">16 <span class="pct">34.0%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:#1baf7a"></span><span class="cn">主动/半主动控制</span><span class="en">Active &amp; Semi-active</span></div><div class="htrack"><div class="hbar" style="width:19.1%;background:#1baf7a" data-tip="主动/半主动控制：9 篇 / 19.1%"></div></div><div class="hval">9 <span class="pct">19.1%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:#eb6834"></span><span class="cn">摆式改良</span><span class="en">Pendulum-based</span></div><div class="htrack"><div class="hbar" style="width:10.6%;background:#eb6834" data-tip="摆式改良：5 篇 / 10.6%"></div></div><div class="hval">5 <span class="pct">10.6%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:#e87ba4"></span><span class="cn">非线性改良</span><span class="en">Nonlinear enhancement</span></div><div class="htrack"><div class="hbar" style="width:10.6%;background:#e87ba4" data-tip="非线性改良：5 篇 / 10.6%"></div></div><div class="hval">5 <span class="pct">10.6%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:#008300"></span><span class="cn">多重/复合式</span><span class="en">Multiple &amp; Combined</span></div><div class="htrack"><div class="hbar" style="width:10.6%;background:#008300" data-tip="多重/复合式：5 篇 / 10.6%"></div></div><div class="hval">5 <span class="pct">10.6%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:#4a3aa7"></span><span class="cn">传统TMD应用</span><span class="en">Conventional TMD application</span></div><div class="htrack"><div class="hbar" style="width:6.4%;background:#4a3aa7" data-tip="传统TMD应用：3 篇 / 6.4%"></div></div><div class="hval">3 <span class="pct">6.4%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:#eda100"></span><span class="cn">液体式改良</span><span class="en">Liquid-based</span></div><div class="htrack"><div class="hbar" style="width:4.3%;background:#eda100" data-tip="液体式改良：2 篇 / 4.3%"></div></div><div class="hval">2 <span class="pct">4.3%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:#e34948"></span><span class="cn">其他（非TMD收录）</span><span class="en">Other (non-TMD records)</span></div><div class="htrack"><div class="hbar" style="width:4.3%;background:#e34948" data-tip="其他（非TMD收录）：2 篇 / 4.3%"></div></div><div class="hval">2 <span class="pct">4.3%</span></div></div>
+</div>
+<div class="card">
+ <h2>应用对象分布</h2>
+ <div class="cap">Distribution by application target</div>
+ <div class="hrow"><div class="hlabel"><span class="dot" style="background:008300"></span><span class="cn">通用/基准结构</span><span class="en">Generic / benchmark structures</span></div><div class="htrack"><div class="hbar" style="width:38.3%;background:008300" data-tip="通用/基准结构：18 篇 / 38.3%"></div></div><div class="hval">18 <span class="pct">38.3%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:2A78D6"></span><span class="cn">高层/建筑结构</span><span class="en">Tall buildings &amp; structures</span></div><div class="htrack"><div class="hbar" style="width:27.7%;background:2A78D6" data-tip="高层/建筑结构：13 篇 / 27.7%"></div></div><div class="hval">13 <span class="pct">27.7%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:EB6834"></span><span class="cn">海洋平台/海上风电</span><span class="en">Offshore platforms &amp; FOWT</span></div><div class="htrack"><div class="hbar" style="width:12.8%;background:EB6834" data-tip="海洋平台/海上风电：6 篇 / 12.8%"></div></div><div class="hval">6 <span class="pct">12.8%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:EDA100"></span><span class="cn">桥梁/缆索</span><span class="en">Bridges &amp; cables</span></div><div class="htrack"><div class="hbar" style="width:8.5%;background:EDA100" data-tip="桥梁/缆索：4 篇 / 8.5%"></div></div><div class="hval">4 <span class="pct">8.5%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:4A3AA7"></span><span class="cn">其他</span><span class="en">Other</span></div><div class="htrack"><div class="hbar" style="width:6.4%;background:4A3AA7" data-tip="其他：3 篇 / 6.4%"></div></div><div class="hval">3 <span class="pct">6.4%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:1BAF7A"></span><span class="cn">风电设备</span><span class="en">Wind turbines</span></div><div class="htrack"><div class="hbar" style="width:4.3%;background:1BAF7A" data-tip="风电设备：2 篇 / 4.3%"></div></div><div class="hval">2 <span class="pct">4.3%</span></div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:E87BA4"></span><span class="cn">烟囱</span><span class="en">Chimneys</span></div><div class="htrack"><div class="hbar" style="width:2.1%;background:E87BA4" data-tip="烟囱：1 篇 / 2.1%"></div></div><div class="hval">1 <span class="pct">2.1%</span></div></div>
+</div>
+<div class="card">
+ <h2>出版年份分布</h2>
+ <div class="cap">Publication year distribution · 2025 年为文献最集中年份</div>
+ <div class="ygrid"><div class="ycol"><div class="ybarwrap"><div class="ybar" style="height:3.8%;background:var(--blue)" data-tip="2019 年：1 篇"></div></div><div class="ylab">2019</div><div class="yval">1</div></div>
+<div class="ycol"><div class="ybarwrap"><div class="ybar" style="height:3.8%;background:var(--blue)" data-tip="2020 年：1 篇"></div></div><div class="ylab">2020</div><div class="yval">1</div></div>
+<div class="ycol"><div class="ybarwrap"><div class="ybar" style="height:7.7%;background:var(--blue)" data-tip="2023 年：2 篇"></div></div><div class="ylab">2023</div><div class="yval">2</div></div>
+<div class="ycol"><div class="ybarwrap"><div class="ybar" style="height:50.0%;background:var(--blue)" data-tip="2024 年：13 篇"></div></div><div class="ylab">2024</div><div class="yval">13</div></div>
+<div class="ycol"><div class="ybarwrap"><div class="ybar" style="height:100.0%;background:var(--blue)" data-tip="2025 年：26 篇"></div></div><div class="ylab">2025</div><div class="yval">26</div></div>
+<div class="ycol"><div class="ybarwrap"><div class="ybar" style="height:15.4%;background:var(--blue)" data-tip="2026 年：4 篇"></div></div><div class="ylab">2026</div><div class="yval">4</div></div></div>
+</div>
+<div class="card">
+ <h2>来源期刊 TOP 10</h2>
+ <div class="cap">Top 10 source journals · 完整期刊统计见 Excel「期刊统计」表 / full journal stats in Excel sheet 3</div>
+ <div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">STRUCTURES</span><span class="en">结构</span></div><div class="htrack"><div class="hbar" style="width:27.8%;background:var(--blue)" data-tip="STRUCTURES：5 篇"></div></div><div class="hval">5</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">JOURNAL OF BUILDING ENGINEERING</span><span class="en">建筑工程学报</span></div><div class="htrack"><div class="hbar" style="width:22.2%;background:var(--blue)" data-tip="JOURNAL OF BUILDING ENGINEERING：4 篇"></div></div><div class="hval">4</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">ENGINEERING STRUCTURES</span><span class="en">工程结构</span></div><div class="htrack"><div class="hbar" style="width:22.2%;background:var(--blue)" data-tip="ENGINEERING STRUCTURES：4 篇"></div></div><div class="hval">4</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">BUILDINGS</span><span class="en">建筑</span></div><div class="htrack"><div class="hbar" style="width:16.7%;background:var(--blue)" data-tip="BUILDINGS：3 篇"></div></div><div class="hval">3</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">MECCANICA</span><span class="en">力学</span></div><div class="htrack"><div class="hbar" style="width:16.7%;background:var(--blue)" data-tip="MECCANICA：3 篇"></div></div><div class="hval">3</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">OCEAN ENGINEERING</span><span class="en">海洋工程</span></div><div class="htrack"><div class="hbar" style="width:11.1%;background:var(--blue)" data-tip="OCEAN ENGINEERING：2 篇"></div></div><div class="hval">2</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">INTERNATIONAL JOURNAL OF MECHANICAL SCIENCES</span><span class="en">国际机械科学学报</span></div><div class="htrack"><div class="hbar" style="width:11.1%;background:var(--blue)" data-tip="INTERNATIONAL JOURNAL OF MECHANICAL SCIENCES：2 篇"></div></div><div class="hval">2</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">INTERNATIONAL JOURNAL OF STRUCTURAL STABILITY AND DYNAMICS</span><span class="en">国际结构稳定性与动力学学报</span></div><div class="htrack"><div class="hbar" style="width:11.1%;background:var(--blue)" data-tip="INTERNATIONAL JOURNAL OF STRUCTURAL STABILITY AND DYNAMICS：2 篇"></div></div><div class="hval">2</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">JOURNAL OF VIBRATION AND CONTROL</span><span class="en">振动与控制学报</span></div><div class="htrack"><div class="hbar" style="width:11.1%;background:var(--blue)" data-tip="JOURNAL OF VIBRATION AND CONTROL：2 篇"></div></div><div class="hval">2</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:var(--blue)"></span><span class="cn">JOURNAL OF VIBRATION AND ACOUSTICS-TRANSACTIONS OF THE ASME</span><span class="en">ASME振动与声学学报</span></div><div class="htrack"><div class="hbar" style="width:11.1%;background:var(--blue)" data-tip="JOURNAL OF VIBRATION AND ACOUSTICS-TRANSACTIONS OF THE ASME：2 篇"></div></div><div class="hval">2</div></div>
+<div class="hrow"><div class="hlabel"><span class="dot" style="background:#898781"></span><span class="cn">其他期刊</span><span class="en">Other journals (10)</span></div><div class="htrack"><div class="hbar" style="width:100.0%;background:#898781" data-tip="其他期刊：18 篇"></div></div><div class="hval">18</div></div>
+</div>
+<div class="card">
+ <h2>文献明细表</h2>
+ <div class="cap">Full record list · 点击上方标签按分类筛选 / click a chip to filter by category</div>
+ <div class="chips"><button class="chip active" data-cat="ALL">全部 All（47）</button><button class="chip" data-cat="A">惯容式改良 Inerter-based（16）</button><button class="chip" data-cat="B">摆式改良 Pendulum-based（5）</button><button class="chip" data-cat="C">主动/半主动控制 Active & Semi-active（9）</button><button class="chip" data-cat="D">液体式改良 Liquid-based（2）</button><button class="chip" data-cat="E">非线性改良 Nonlinear enhancement（5）</button><button class="chip" data-cat="F">多重/复合式 Multiple & Combined（5）</button><button class="chip" data-cat="G">传统TMD应用 Conventional TMD application（3）</button><button class="chip" data-cat="H">其他（非TMD收录） Other (non-TMD records)（2）</button></div>
+ <div style="overflow:auto;max-height:560px">
+ <table>
+  <thead><tr><th>No.</th><th>Title (EN) 题名（英）</th><th>题名（中）Title (CN)</th>
+   <th>第一作者 First Author</th><th>期刊 Journal</th><th>年 Year</th>
+   <th>分类 Category</th><th>应用对象 Application</th><th>DOI</th></tr></thead>
+  <tbody><tr data-cat="B"><td class="num">1</td><td class="t-en">Robust optimization of double pendulum tuned mass damper for vibration control of offshore platforms</td><td class="t-cn">海上平台双摆调谐质量阻尼器（DPTMD）振动控制的鲁棒优化</td><td>Pham, Thi-Ly</td><td class="jrn">ENGINEERING RESEARCH EXPRESS</td><td class="num">2025</td><td><span class="badge" style="background:#eb6834">摆式改良 Pendulum-based</span></td><td>海洋平台/海上风电 / Offshore platforms &amp; FOWT</td><td class="doi">10.1088/2631-8695/ae1d10</td></tr>
+<tr data-cat="E"><td class="num">2</td><td class="t-en">Motion response suppression for floating offshore wind turbine using pounding tuned rotary mass damper with large mass ratio in platform</td><td class="t-cn">大质量比碰撞式调谐旋转质量阻尼器（PTRMD）抑制漂浮式海上风电机组运动响应</td><td>Zhao, Yuan</td><td class="jrn">OCEAN ENGINEERING</td><td class="num">2026</td><td><span class="badge" style="background:#e87ba4">非线性改良 Nonlinear enhancement</span></td><td>海洋平台/海上风电 / Offshore platforms &amp; FOWT</td><td class="doi">10.1016/j.oceaneng.2025.123842</td></tr>
+<tr data-cat="C"><td class="num">3</td><td class="t-en">A semi-active cell-tuned liquid mass damper for wave-induced vibration control of offshore jacket structures</td><td class="t-cn">用于海洋导管架平台波浪振动控制的半主动格室调谐液体质量阻尼器</td><td>Sardar, Rajib</td><td class="jrn">SHIPS AND OFFSHORE STRUCTURES</td><td class="num">2025</td><td><span class="badge" style="background:#1baf7a">主动/半主动控制 Active &amp; Semi-active</span></td><td>海洋平台/海上风电 / Offshore platforms &amp; FOWT</td><td class="doi">10.1080/17445302.2025.2591951</td></tr>
+<tr data-cat="A"><td class="num">4</td><td class="t-en">A Lightweight Tuned Viscous Mass Damper with Negative Stiffness for Stochastic Vibration Mitigation via Triple Damping Enhancement</td><td class="t-cn">带负刚度的轻型调谐粘滞质量阻尼器：三重阻尼增强的随机振动控制</td><td>Zhang, Ruoyu</td><td class="jrn">JOURNAL OF VIBRATION ENGINEERING &amp; TECHNOLOGIES</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1007/s42417-025-02165-1</td></tr>
+<tr data-cat="C"><td class="num">5</td><td class="t-en">Dynamic analysis of 600-m-high skyscraper with active tuned mass damper system under 7.4 magnitude long-distance earthquake excitation</td><td class="t-cn">7.4级远震作用下600米高超高层建筑主动TMD（ATMD）动力分析</td><td>Zhou, Jian</td><td class="jrn">JOURNAL OF BUILDING ENGINEERING</td><td class="num">2025</td><td><span class="badge" style="background:#1baf7a">主动/半主动控制 Active &amp; Semi-active</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1016/j.jobe.2025.114563</td></tr>
+<tr data-cat="A"><td class="num">6</td><td class="t-en">Structural vibration mitigation via the variant tuned mass damper inerter</td><td class="t-cn">变体调谐质量阻尼器-惯容（V-TMDI）的结构减振</td><td>Cheng, Zhibao</td><td class="jrn">INTERNATIONAL JOURNAL OF MECHANICAL SCIENCES</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1016/j.ijmecsci.2025.110954</td></tr>
+<tr data-cat="E"><td class="num">7</td><td class="t-en">Suppression of self-excited vibrations using tuned mass damper or nonlinear energy sink</td><td class="t-cn">调谐质量阻尼器与非线性能量阱对自激振动的抑制</td><td>Chao, Cui</td><td class="jrn">NONLINEAR DYNAMICS</td><td class="num">2025</td><td><span class="badge" style="background:#e87ba4">非线性改良 Nonlinear enhancement</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1007/s11071-025-11769-x</td></tr>
+<tr data-cat="E"><td class="num">8</td><td class="t-en">Design and Optimization of a Nonlinear Tuned Mass Damper with Eddy Current Damping</td><td class="t-cn">带涡流阻尼的非线性TMD（NLEC-TMD）设计与优化</td><td>Galoshejerdi, Leila Hashemi</td><td class="jrn">INTERNATIONAL JOURNAL OF STRUCTURAL STABILITY AND DYNAMICS</td><td class="num">2025</td><td><span class="badge" style="background:#e87ba4">非线性改良 Nonlinear enhancement</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1142/S0219455426503979</td></tr>
+<tr data-cat="A"><td class="num">9</td><td class="t-en">Butterfly-shaped damping-integrated tuned viscous mass damper for highly enhanced damping and acceleration control</td><td class="t-cn">蝶形阻尼集成调谐粘滞质量阻尼器（BTVMD）增强阻尼与加速度控制</td><td>Wu, Minjun</td><td class="jrn">JOURNAL OF BUILDING ENGINEERING</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1016/j.jobe.2025.113521</td></tr>
+<tr data-cat="A"><td class="num">10</td><td class="t-en">Shake table experimental validation of auxiliary mass effects in a tuned viscous mass damper</td><td class="t-cn">调谐粘滞质量阻尼器中辅助质量效应的振动台试验验证</td><td>Deastra, Predaricka</td><td class="jrn">STRUCTURES</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1016/j.istruc.2025.109681</td></tr>
+<tr data-cat="B"><td class="num">11</td><td class="t-en">Upgraded rocker pendulum-tuned mass damper for passive vibration control of structures</td><td class="t-cn">升级版摇杆摆式调谐质量阻尼器（URPTMD）用于结构被动振动控制</td><td>Cao, Huong Quoc</td><td class="jrn">MECHANICS BASED DESIGN OF STRUCTURES AND MACHINES</td><td class="num">2025</td><td><span class="badge" style="background:#eb6834">摆式改良 Pendulum-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1080/15397734.2025.2531076</td></tr>
+<tr data-cat="A"><td class="num">12</td><td class="t-en">Optimal parameters of rotational inerter double tuned mass damper for different excitation and response combinations</td><td class="t-cn">旋转惯容双TMD（RIDTMD）不同激励与响应组合的最优参数</td><td>Zhang, Guanping</td><td class="jrn">SOIL DYNAMICS AND EARTHQUAKE ENGINEERING</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1016/j.soildyn.2025.109641</td></tr>
+<tr data-cat="G"><td class="num">13</td><td class="t-en">Dynamic Response Mitigation of Offshore Jacket Platform Using Tuned Mass Damper Under Misaligned Typhoon and Typhoon Wave</td><td class="t-cn">台风与斜向波浪作用下海洋导管架平台TMD动力响应控制</td><td>Jiang, Kaien</td><td class="jrn">APPLIED SCIENCES-BASEL</td><td class="num">2025</td><td><span class="badge" style="background:#4a3aa7">传统TMD应用 Conventional TMD application</span></td><td>海洋平台/海上风电 / Offshore platforms &amp; FOWT</td><td class="doi">10.3390/app15137321</td></tr>
+<tr data-cat="A"><td class="num">14</td><td class="t-en">Optimization and performance evaluation of nonlinear pendulum tuned mass damper inerters (NPTMDIs)</td><td class="t-cn">非线性摆式调谐质量阻尼器-惯容系统（NPTMDI）的优化与性能评估</td><td>Ma, Ruisheng</td><td class="jrn">JOURNAL OF BUILDING ENGINEERING</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1016/j.jobe.2025.113157</td></tr>
+<tr data-cat="A"><td class="num">15</td><td class="t-en">Double tuned mass damper with a grounded inerter for structural vibration control</td><td class="t-cn">带接地惯容的双TMD（DTMDI）结构振动控制</td><td>Cao, Huong Quoc</td><td class="jrn">JOURNAL OF VIBRATION AND CONTROL</td><td class="num">2026</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1177/10775463251341758</td></tr>
+<tr data-cat="A"><td class="num">16</td><td class="t-en">Structural Reliability of Tall Buildings Under Wind Loads with Tuned Mass Damper Fluid Inerters</td><td class="t-cn">风荷载下带流体惯容TMD（TMDFI）的高层建筑结构可靠度</td><td>McEvoy, Caelan</td><td class="jrn">BUILDINGS</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.3390/buildings15101736</td></tr>
+<tr data-cat="A"><td class="num">17</td><td class="t-en">Seismic Performance Assessment of Optimal Tandem-Based Tuned Mass Damper Inerters</td><td class="t-cn">串联式TMD-惯容系统（ICTTMDI/I-TTMDI）抗震性能评估</td><td>Fahimi Farzam, Maziar</td><td class="jrn">BUILDINGS</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.3390/buildings15091441</td></tr>
+<tr data-cat="E"><td class="num">18</td><td class="t-en">Optimal design of a novel tuned mass rate-independent damper for structural vibration suppression</td><td class="t-cn">新型调谐质量率无关阻尼器（TMRD）的结构减振优化设计</td><td>Jiang, Junqi</td><td class="jrn">MECCANICA</td><td class="num">2025</td><td><span class="badge" style="background:#e87ba4">非线性改良 Nonlinear enhancement</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1007/s11012-025-01980-w</td></tr>
+<tr data-cat="A"><td class="num">19</td><td class="t-en">Performance evaluation of a lever-assisted optimized tuned mass damper inerter in mitigating edgewise vibration of wind turbine blade</td><td class="t-cn">杠杆辅助TMD-惯容（LTMDI）抑制风电叶片挥舞振动</td><td>Sonkusare, Vishal D.</td><td class="jrn">ENGINEERING STRUCTURES</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>风电设备 / Wind turbines</td><td class="doi">10.1016/j.engstruct.2025.119954</td></tr>
+<tr data-cat="E"><td class="num">20</td><td class="t-en">Enhancing vibration control: A parallel integration of tuned mass damper with inerter and vibro-impact nonlinear energy sink</td><td class="t-cn">TMD-惯容（TMDI）与碰撞非线性能量阱（VI-NES）并联集成减振</td><td>Abdollahi, Ali</td><td class="jrn">CHAOS SOLITONS &amp; FRACTALS</td><td class="num">2026</td><td><span class="badge" style="background:#e87ba4">非线性改良 Nonlinear enhancement</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1016/j.chaos.2025.117658</td></tr>
+<tr data-cat="A"><td class="num">21</td><td class="t-en">Optimal design and performance analysis of a tuned negative-stiffness inerter mass damper for vibration control systems</td><td class="t-cn">调谐负刚度惯容质量阻尼器（TNIMD）的优化设计与性能分析</td><td>Tai, Yu-ji</td><td class="jrn">STRUCTURES</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1016/j.istruc.2024.108163</td></tr>
+<tr data-cat="C"><td class="num">22</td><td class="t-en">Semi-Active Groundhook Control of Offshore Tension Leg Platforms Using Tuned Mass Damper With Optimized Parameters and Magneto-Rheological Damper Under Multiple Hazards</td><td class="t-cn">多灾害下海洋张力腿平台的磁流变-半主动TMD（groundhook控制）减振</td><td>Patra, Suryasish</td><td class="jrn">JOURNAL OF OFFSHORE MECHANICS AND ARCTIC ENGINEERING-TRANSACTIONS OF THE ASME</td><td class="num">2025</td><td><span class="badge" style="background:#1baf7a">主动/半主动控制 Active &amp; Semi-active</span></td><td>海洋平台/海上风电 / Offshore platforms &amp; FOWT</td><td class="doi">10.1115/1.4064299</td></tr>
+<tr data-cat="H"><td class="num">23</td><td class="t-en">Normal modes of the small-amplitude oscillon</td><td class="t-cn">小振幅oscillon的简正模（高能物理文献）</td><td>Evslin, Jarah</td><td class="jrn">JOURNAL OF HIGH ENERGY PHYSICS</td><td class="num">2025</td><td><span class="badge" style="background:#e34948">其他（非TMD收录） Other (non-TMD records)</span></td><td>其他 / Other</td><td class="doi">10.1007/JHEP01(2025)039</td></tr>
+<tr data-cat="C"><td class="num">24</td><td class="t-en">An Innovative Semiactive Rolling Tuned Mass Damper for Structural Vibration Mitigation</td><td class="t-cn">创新半主动滚动调谐质量阻尼器（SARTMD）的结构减振</td><td>Mazloom, Shayan</td><td class="jrn">STRUCTURAL CONTROL &amp; HEALTH MONITORING</td><td class="num">2025</td><td><span class="badge" style="background:#1baf7a">主动/半主动控制 Active &amp; Semi-active</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1155/stc/9627790</td></tr>
+<tr data-cat="F"><td class="num">25</td><td class="t-en">Optimization Analysis of Vibration Reduction for Large-Span Steel Pedestrian Bridges Based on Tuned Mass Damper Inerter System</td><td class="t-cn">基于TMD-惯容系统的大跨钢桁架人行桥减振优化分析</td><td>Song, Rong-Fang</td><td class="jrn">ADVANCES IN CIVIL ENGINEERING</td><td class="num">2025</td><td><span class="badge" style="background:#008300">多重/复合式 Multiple &amp; Combined</span></td><td>桥梁/缆索 / Bridges &amp; cables</td><td class="doi">10.1155/adce/6521700</td></tr>
+<tr data-cat="A"><td class="num">26</td><td class="t-en">Torsional Behavior Enhancement of Asymmetric-Plan Building Structures Using Optimum Tuned Mass Damper Inerter</td><td class="t-cn">不对称平面建筑扭转响应的双TMD-惯容最优控制</td><td>Ghaderi, Pedram</td><td class="jrn">JOURNAL OF EARTHQUAKE ENGINEERING</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1080/13632469.2024.2436109</td></tr>
+<tr data-cat="G"><td class="num">27</td><td class="t-en">Using a Rigid Restraint with a Built-In Tuned Mass Damper to Control the Vibration of Cables</td><td class="t-cn">内置TMD刚性约束装置控制拉索振动</td><td>Li, Honghai</td><td class="jrn">BUILDINGS</td><td class="num">2024</td><td><span class="badge" style="background:#4a3aa7">传统TMD应用 Conventional TMD application</span></td><td>桥梁/缆索 / Bridges &amp; cables</td><td class="doi">10.3390/buildings14123785</td></tr>
+<tr data-cat="C"><td class="num">28</td><td class="t-en">Semi-Active Vibration Control for Wind Turbines: A Variable Tuned Mass Damper Approach Utilizing 1st Modal and 3P Tuning</td><td class="t-cn">风电塔筒1阶模态与3P双调谐的半主动变调谐TMD振动控制</td><td>Bai, Jiulin</td><td class="jrn">INTERNATIONAL JOURNAL OF STRUCTURAL STABILITY AND DYNAMICS</td><td class="num">2026</td><td><span class="badge" style="background:#1baf7a">主动/半主动控制 Active &amp; Semi-active</span></td><td>风电设备 / Wind turbines</td><td class="doi">10.1142/S0219455426500276</td></tr>
+<tr data-cat="C"><td class="num">29</td><td class="t-en">Seismic adaptive control of building structures using active friction tuned mass damper</td><td class="t-cn">主动摩擦TMD（AFTMD）的建筑结构抗震自适应控制</td><td>Saadatfar, Saman</td><td class="jrn">STRUCTURES</td><td class="num">2024</td><td><span class="badge" style="background:#1baf7a">主动/半主动控制 Active &amp; Semi-active</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1016/j.istruc.2024.107575</td></tr>
+<tr data-cat="F"><td class="num">30</td><td class="t-en">Multi-tuned mass damper inerter (MTMDI) system for earthquake-induced vibration control of buildings</td><td class="t-cn">多重调谐质量阻尼器-惯容系统（MTMDI）的建筑地震振动控制</td><td>Djerouni, Salah</td><td class="jrn">ENGINEERING STRUCTURES</td><td class="num">2025</td><td><span class="badge" style="background:#008300">多重/复合式 Multiple &amp; Combined</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1016/j.engstruct.2024.119139</td></tr>
+<tr data-cat="F"><td class="num">31</td><td class="t-en">Response control of chimneys using tuned mass damper, multi-tuned mass damper and tuned mass inerter system</td><td class="t-cn">高耸烟囱TMD/MTMD/调谐质量-惯容系统（TMIS）风振控制对比</td><td>Rahman, Saba</td><td class="jrn">STRUCTURES</td><td class="num">2024</td><td><span class="badge" style="background:#008300">多重/复合式 Multiple &amp; Combined</span></td><td>烟囱 / Chimneys</td><td class="doi">10.1016/j.istruc.2024.107526</td></tr>
+<tr data-cat="A"><td class="num">32</td><td class="t-en">Dynamic characteristics of a novel inerter-enhanced tuned mass damper for structural vibration control</td><td class="t-cn">新型串联惯容阻尼器（TSID）的结构振动控制动态特性</td><td>Luo, Hao</td><td class="jrn">MECCANICA</td><td class="num">2024</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1007/s11012-024-01886-z</td></tr>
+<tr data-cat="C"><td class="num">33</td><td class="t-en">Vibration control of structure using active tuned mass damper: A new control algorithm</td><td class="t-cn">主动TMD（ATMD）结构振动控制的新算法</td><td>Safakhaneh, Motasam Mousaviyan</td><td class="jrn">JOURNAL OF VIBRATION AND CONTROL</td><td class="num">2025</td><td><span class="badge" style="background:#1baf7a">主动/半主动控制 Active &amp; Semi-active</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1177/10775463241263889</td></tr>
+<tr data-cat="A"><td class="num">34</td><td class="t-en">Optimal design of inerter-based absorbers with amplified inertance: from the improved tuned liquid column damper inerter (ITLCDI) to the improved tuned mass damper inerter (ITMDI) and improved tuned inerter damper (ITID)</td><td class="t-cn">惯容放大（菱形桁架）吸振器优化设计：ITLCDI/ITMDI/ITID</td><td>Masnata, Chiara</td><td class="jrn">MECCANICA</td><td class="num">2025</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1007/s11012-024-01834-x</td></tr>
+<tr data-cat="F"><td class="num">35</td><td class="t-en">Robust damping improvement against the vortex-induced vibration in flexible bridges using multiple tuned mass damper inerters</td><td class="t-cn">多重TMD-惯容（MTMDI）提升柔性桥梁涡激振动阻尼鲁棒性</td><td>Dai, Jun</td><td class="jrn">ENGINEERING STRUCTURES</td><td class="num">2024</td><td><span class="badge" style="background:#008300">多重/复合式 Multiple &amp; Combined</span></td><td>桥梁/缆索 / Bridges &amp; cables</td><td class="doi">10.1016/j.engstruct.2024.118221</td></tr>
+<tr data-cat="A"><td class="num">36</td><td class="t-en">Optimum tuned mass damper inerter under near-fault pulse-like ground motions of buildings including soil-structure interaction</td><td class="t-cn">考虑土-结构相互作用的近断层脉冲地震TMD-惯容最优控制</td><td>Elias, Said</td><td class="jrn">JOURNAL OF BUILDING ENGINEERING</td><td class="num">2024</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1016/j.jobe.2024.108674</td></tr>
+<tr data-cat="F"><td class="num">37</td><td class="t-en">Vibration Damping of a Taut Cable with the Hybrid Application of a Viscous Damper and a Tuned Mass Damper</td><td class="t-cn">粘滞阻尼器与TMD混合应用的张紧索减振</td><td>Yang, Xia</td><td class="jrn">JOURNAL OF BRIDGE ENGINEERING</td><td class="num">2024</td><td><span class="badge" style="background:#008300">多重/复合式 Multiple &amp; Combined</span></td><td>桥梁/缆索 / Bridges &amp; cables</td><td class="doi">10.1061/JBENF2.BEENG-6411</td></tr>
+<tr data-cat="C"><td class="num">38</td><td class="t-en">Vibration mitigation of offshore structures subjected to wave and wind loads using optimum semi-active tuned mass damper inerter (SATMDI)</td><td class="t-cn">波浪风荷载下海洋结构最优半主动TMD-惯容（SATMDI）减振</td><td>Gavgani, Seyyed Ali Mousavi</td><td class="jrn">OCEAN ENGINEERING</td><td class="num">2024</td><td><span class="badge" style="background:#1baf7a">主动/半主动控制 Active &amp; Semi-active</span></td><td>海洋平台/海上风电 / Offshore platforms &amp; FOWT</td><td class="doi">10.1016/j.oceaneng.2024.117110</td></tr>
+<tr data-cat="B"><td class="num">39</td><td class="t-en">Seismic optimization of pendulum tuned mass damper with hysteretic damping</td><td class="t-cn">带滞回阻尼摆式调谐质量阻尼器（PTMD）的抗震优化</td><td>Xiang, Yue</td><td class="jrn">INTERNATIONAL JOURNAL OF MECHANICAL SCIENCES</td><td class="num">2024</td><td><span class="badge" style="background:#eb6834">摆式改良 Pendulum-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1016/j.ijmecsci.2024.109073</td></tr>
+<tr data-cat="C"><td class="num">40</td><td class="t-en">Development of embedded system for active pendulum tuned mass damper</td><td class="t-cn">主动摆式TMD嵌入式系统开发（MECO会议）</td><td>Mehremic, Semir</td><td class="jrn">2024 13TH MEDITERRANEAN CONFERENCE ON EMBEDDED COMPUTING, MECO 2024</td><td class="num">2024</td><td><span class="badge" style="background:#1baf7a">主动/半主动控制 Active &amp; Semi-active</span></td><td>其他 / Other</td><td class="doi">10.1109/MECO62516.2024.10577915</td></tr>
+<tr data-cat="G"><td class="num">41</td><td class="t-en">An Experimental Investigation on Tuned Mass Damper for Mitigation of Structural Response of Frame Structures</td><td class="t-cn">TMD减轻框架结构响应的振动台试验研究</td><td>Sahoo, Padmabati</td><td class="jrn">ROMANIAN JOURNAL OF ACOUSTICS AND VIBRATION</td><td class="num">2024</td><td><span class="badge" style="background:#4a3aa7">传统TMD应用 Conventional TMD application</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">—</td></tr>
+<tr data-cat="H"><td class="num">42</td><td class="t-en">A NOVEL ULTRA-LOW-FREQUENCY MICRO-VIBRATION CALIBRATION METHOD BASED ON VIRTUAL PENDULUM MOTION TRAJECTORIES OF THE STEWART PLATFORM</td><td class="t-cn">基于Stewart平台虚拟摆运动轨迹的超低频微振动校准方法</td><td>Ye, Tong</td><td class="jrn">METROLOGY AND MEASUREMENT SYSTEMS</td><td class="num">2024</td><td><span class="badge" style="background:#e34948">其他（非TMD收录） Other (non-TMD records)</span></td><td>其他 / Other</td><td class="doi">10.24425/mms.2024.149695</td></tr>
+<tr data-cat="B"><td class="num">43</td><td class="t-en">Pendulum tuned mass damper (PTMD) with geometric nonlinear dampers for seismic response control</td><td class="t-cn">带几何非线性阻尼器的摆式TMD（PTMD-GND）抗震控制</td><td>Xiang, Yue</td><td class="jrn">JOURNAL OF SOUND AND VIBRATION</td><td class="num">2024</td><td><span class="badge" style="background:#eb6834">摆式改良 Pendulum-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1016/j.jsv.2023.118023</td></tr>
+<tr data-cat="A"><td class="num">44</td><td class="t-en">A novel tuned mass damper inerter: optimal design, effectiveness comparison, and robustness investigation</td><td class="t-cn">新型调谐质量阻尼器-惯容（NTMDI）：优化设计、效果对比与鲁棒性</td><td>Li, Yafeng</td><td class="jrn">STRUCTURES</td><td class="num">2023</td><td><span class="badge" style="background:#2a78d6">惯容式改良 Inerter-based</span></td><td>通用/基准结构 / Generic / benchmark structures</td><td class="doi">10.1016/j.istruc.2023.06.076</td></tr>
+<tr data-cat="B"><td class="num">45</td><td class="t-en">Inerter-assisted pendulum-tuned mass damper for across-wind response control of tall buildings</td><td class="t-cn">惯容辅助摆式TMD（IA-PTMD）高层建筑横风向响应控制</td><td>Suthar, Sameer J.</td><td class="jrn">ENGINEERING STRUCTURES</td><td class="num">2023</td><td><span class="badge" style="background:#eb6834">摆式改良 Pendulum-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1016/j.engstruct.2023.116489</td></tr>
+<tr data-cat="D"><td class="num">46</td><td class="t-en">Series-Type Pendulum Tuned Mass Damper-Tuned Sloshing Damper</td><td class="t-cn">串联型摆式TMD-调谐晃荡阻尼器（PTMD-TSD）</td><td>Love, J. S.</td><td class="jrn">JOURNAL OF VIBRATION AND ACOUSTICS-TRANSACTIONS OF THE ASME</td><td class="num">2020</td><td><span class="badge" style="background:#eda100">液体式改良 Liquid-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1115/1.4044866</td></tr>
+<tr data-cat="D"><td class="num">47</td><td class="t-en">Nonlinear Series-Type Tuned Mass Damper-Tuned Sloshing Damper for Improved Structural Control</td><td class="t-cn">非线性串联型TMD-调谐晃荡阻尼器的结构控制改进</td><td>Love, J. S.</td><td class="jrn">JOURNAL OF VIBRATION AND ACOUSTICS-TRANSACTIONS OF THE ASME</td><td class="num">2019</td><td><span class="badge" style="background:#eda100">液体式改良 Liquid-based</span></td><td>高层/建筑结构 / Tall buildings &amp; structures</td><td class="doi">10.1115/1.4041513</td></tr></tbody>
+ </table>
+ </div>
+</div>
+<footer>数据来源 / Source: 现有TDM改良方案.xls（Web of Science 导出）· 生成日期 / Generated: 2026-10-09 · 分类统计由 Claude Code 完成，颜色方案经色觉安全校验</footer>
+</div>
+<div id="tip"></div>
+<script>
+var tip=document.getElementById('tip');
+document.addEventListener('mouseover',function(e){
+ var t=e.target.closest('[data-tip]');
+ if(!t)return;
+ tip.textContent=t.getAttribute('data-tip');
+ tip.style.display='block';
+ var r=t.getBoundingClientRect();
+ tip.style.left=Math.min(r.left+8,window.innerWidth-160)+'px';
+ tip.style.top=(r.top-30)+'px';
+});
+document.addEventListener('mouseout',function(e){
+ if(e.target.closest('[data-tip]'))tip.style.display='none';
+});
+var btn=document.getElementById('themeBtn');
+var cur=document.documentElement.getAttribute('data-theme')||'light';
+function upd(){btn.textContent=cur==='dark'?'亮色模式 Light':'暗色模式 Dark';
+ document.documentElement.setAttribute('data-theme',cur);}
+upd();
+btn.addEventListener('click',function(){cur=cur==='dark'?'light':'dark';upd();});
+var chips=document.querySelectorAll('.chip');
+chips.forEach(function(ch){ch.addEventListener('click',function(){
+ chips.forEach(function(c){c.classList.remove('active')});ch.classList.add('active');
+ var cat=ch.getAttribute('data-cat');
+ document.querySelectorAll('tbody tr').forEach(function(tr){
+  tr.style.display=(cat==='ALL'||tr.getAttribute('data-cat')===cat)?'':'none';});
+});});
+</script>
+</body>
+</html>
